@@ -4,7 +4,7 @@
 -->
 <class name="custom_ronex_driver/33554434" type="SrSPI_cr" base_class_type="EthercatDevice">
   <description>
-    RoNeX - SPI module
+    Ronex SPI driver for Power-Orthosis @ Fraunhofer IPA
   </description>
 </class>
 

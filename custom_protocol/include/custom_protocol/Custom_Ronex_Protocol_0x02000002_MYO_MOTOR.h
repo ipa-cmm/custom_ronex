@@ -16,6 +16,7 @@
  */
 
 //! EtherCAT protocol for RoNeX SPI stacker, 02.
+// Modified for Orthosis SPI Controller
 
 #ifndef CUSTOM_RONEX_PROTOCOL_0x02000002_SPI_H_INCLUDED
 #define CUSTOM_RONEX_PROTOCOL_0x02000002_SPI_H_INCLUDED
@@ -39,7 +40,7 @@
 #define NUM_DIGITAL_IO                                             6
 #define NUM_DIO_SAMPLES                                            4
 #define NUM_SPI_OUTPUTS                                            4
-#define PRODUCT_NAME                                  "orthosis_spi"
+#define PRODUCT_NAME                                  "orthosis_spi"        //!<new name for orthosis
 #define PRODUCT_ID                                        0x02000002        //!< d 33554434
 #define MAXIMUM_NUM_STACKERS                                       2
 #define STACKER_TYPE                                               2        //!< range [1..13]

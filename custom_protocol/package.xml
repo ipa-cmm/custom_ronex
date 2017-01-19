@@ -2,7 +2,7 @@
   <name>custom_protocol</name>
   <version>0.11.0</version>
   <description>Contains the protocol to communicate between the driver and the ronex hardware.</description>
-  <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
+  <maintainer email="daniel.bargmann@ipa.fraunhofer.de">Fraunhofer IPA</maintainer>
 
   <license>LGPLv3</license>
 
@@ -13,6 +13,7 @@
   <author>Ugo Cupcic</author>
   <author>Toni Oliver</author>
   <author>Mark Pitchless</author>
+  <author>Daniel Bargmann</author>
 
   <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>

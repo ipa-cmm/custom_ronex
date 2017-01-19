@@ -16,10 +16,11 @@
  */
 
 /**
- * @file   spi_hardware_interface.hpp
- * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @brief  The RoNeX SPI module data to be stored
- *         in the HardwareInterface.
+ * @file   custom_ronex_interface.h
+ * @author Daniel Bargmann <daniel.bargmann@ipa.fraunhofer.de
+ * @brief  The RoNeX SPI module data and helper functions
+ *         to be stored in the
+ *         HardwareInterface.
  **/
 
 #ifndef _SPI_HARDWARE_INTERFACE_H_
