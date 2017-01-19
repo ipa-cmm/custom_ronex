@@ -1,0 +1,11 @@
+<library path="lib/libcustom_ronex_driver" >
+<!--
+        The following definitions are EthercatDevice plugins (they are the drivers for a certain type of ethercat slave device, determined by its product code)
+-->
+<class name="custom_ronex_driver/33554434" type="SrSPI_cr" base_class_type="EthercatDevice">
+  <description>
+    RoNeX - SPI module
+  </description>
+</class>
+
+</library>

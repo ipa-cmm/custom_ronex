@@ -1,0 +1,19 @@
+<launch>
+
+  <include file="$(find custom_ronex_driver)/launch/4muscles.launch" />
+
+  <rosparam ns="ronex">
+    custom_control:
+      type: custom_controllers/custom_controller
+      joint: 'muscle2'
+      ronex_id: '1437473669'
+  </rosparam>
+
+  <!-- Load the default controllers -->
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="
+        ronex/custom_control
+      " />
+
+</launch>

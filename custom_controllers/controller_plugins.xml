@@ -1,0 +1,12 @@
+<library path="lib/libcustom_controllers">
+
+  <class
+    name="custom_controllers/custom_controller"
+    type="ronex::customController"
+    base_class_type="controller_interface::ControllerBase">
+    <description>
+      This is a custom Controller
+    </description>
+  </class>
+
+</library>
