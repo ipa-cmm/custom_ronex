@@ -59,16 +59,16 @@ CustomRonex()
 
         // Set everything to 0
         digitalIO = 0;
-        command = 0;
-        for(int i= 0; i<SPI_TRANSACTION_MAX_SIZE; ++i)
+        command   = 0;
+        for(int i = 0; i<SPI_TRANSACTION_MAX_SIZE; ++i)
                 spi_data[i] = 0;
 
-        sens.position = 0;
-        sens.velocity = 0;
+        sens.position     = 0;
+        sens.velocity     = 0;
         sens.displacement = 0;
-        sens.current = 0;
-        sens.sensor1 = 0;
-        sens.sensor2 = 0;
+        sens.current      = 0;
+        sens.sensor1      = 0;
+        sens.sensor2      = 0;
 
         for(int i = 0; i <6; i++)
                 sens.analog[i] = 0;
@@ -91,7 +91,7 @@ void setDigitalOut(bool state,int index){
                 if(state)
                         digitalIO |= 1 << index;
                 else
-                        digitalIO |= ~(1 << index);
+                        digitalIO &= ~(1 << index);
 }
 
 void setCommand(int command_){
