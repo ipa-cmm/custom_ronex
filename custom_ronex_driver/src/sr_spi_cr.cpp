@@ -297,19 +297,25 @@ bool SrSPI_cr::unpackState(unsigned char *this_buffer, unsigned char *prev_buffe
                                  */
                         }
                         int8u *data = status_data->info_type.status_data.spi_in[spi_index].data_bytes;
-                        spi_->sens.position     = (data[8] << 24) + (data[9] << 16) + (data[10] << 8) + data[11];
-                        spi_->sens.velocity     = (data[12] << 8) + data[13];
-                        spi_->sens.current      = (data[14] << 8) + data[15];
-                        spi_->sens.displacement = (data[16] << 8) + data[17];
-                        spi_->sens.sensor1      = (data[18] << 8) + data[19];
-                        spi_->sens.sensor2      = (data[20] << 8) + data[21];
+                        spi_->sens[spi_index].position     = (data[8] << 24) + (data[9] << 16) + (data[10] << 8) + data[11];
+                        spi_->sens[spi_index].velocity     = (data[12] << 8) + data[13];
+                        spi_->sens[spi_index].current      = (data[14] << 8) + data[15];
+                        spi_->sens[spi_index].displacement = (data[16] << 8) + data[17];
+                        spi_->sens[spi_index].sensor1      = (data[18] << 8) + data[19];
+                        spi_->sens[spi_index].sensor2      = (data[20] << 8) + data[21];
+
+                        ostringstream debugSS;
+                        debugSS << std::hex << std::setfill('0');
+                        for (int i = 8; i<17; i++)
+                                debugSS << " 0x" <<std::setw(2) <<  static_cast<unsigned>(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i]);
+                        ROS_DEBUG_STREAM(debugSS.str());
                 }
 
                 for (size_t analogue_index = 0; analogue_index < NUM_ANALOGUE_INPUTS; ++analogue_index)
                 {
                         spi_->state_->info_type.status_data.analogue_in[analogue_index] =
                                 status_data->info_type.status_data.analogue_in[analogue_index];
-                        spi_->sens.analog[analogue_index] = status_data->info_type.status_data.analogue_in[analogue_index];
+                        spi_->analog[analogue_index] = status_data->info_type.status_data.analogue_in[analogue_index];
                 }
 
         }
