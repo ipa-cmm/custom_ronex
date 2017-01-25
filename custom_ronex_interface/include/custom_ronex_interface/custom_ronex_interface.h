@@ -42,14 +42,15 @@ struct sensorData {
         short current;
         short sensor1;
         short sensor2;
-        uint16_t analog[6];
+
 };
 
 class CustomRonex
         : public ros_ethercat_model::CustomHW
 {
 public:
-sensorData sens;
+sensorData sens[4];
+uint16_t analog[6];
 
 CustomRonex()
 {
@@ -62,16 +63,16 @@ CustomRonex()
         command   = 0;
         for(int i = 0; i<SPI_TRANSACTION_MAX_SIZE; ++i)
                 spi_data[i] = 0;
-
-        sens.position     = 0;
-        sens.velocity     = 0;
-        sens.displacement = 0;
-        sens.current      = 0;
-        sens.sensor1      = 0;
-        sens.sensor2      = 0;
-
+        for(int i = 0; i<4; i++) {
+                sens[i].position     = 0;
+                sens[i].velocity     = 0;
+                sens[i].displacement = 0;
+                sens[i].current      = 0;
+                sens[i].sensor1      = 0;
+                sens[i].sensor2      = 0;
+        }
         for(int i = 0; i <6; i++)
-                sens.analog[i] = 0;
+                analog[i] = 0;
 
 
 }
@@ -99,12 +100,12 @@ void setCommand(int command_){
                 command = command_;
 }
 
-sensorData getSensorData() const {
-        return sens;
+sensorData getSensorData(int index) const {
+        return sens[index];
 }
 
 double getAnalog(int index){
-        return sens.analog[index];
+        return analog[index];
 }
 
 

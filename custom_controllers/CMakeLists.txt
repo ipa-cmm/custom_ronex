@@ -8,6 +8,7 @@ project(custom_controllers)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     std_msgs
+    custom_ronex_msgs
     std_srvs
     sr_ronex_msgs
     sr_ronex_hardware_interface
@@ -33,6 +34,7 @@ catkin_package(
     CATKIN_DEPENDS
         roscpp
         std_msgs
+        custom_ronex_msgs
         std_srvs
         sr_ronex_msgs
         sr_ronex_hardware_interface

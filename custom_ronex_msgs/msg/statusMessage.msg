@@ -1,0 +1,17 @@
+time     time
+int32    debugMode
+int32    controllerState
+int32    clutchState
+float64  position
+float64  velocity
+float64  displacement
+float64  reference
+float64  current
+float64  commanded_effort
+float64  analogIN0
+float64  buffer0
+float64  buffer1
+float64  buffer2
+float64  buffer3
+float64  buffer4
+float64  buffer5

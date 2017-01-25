@@ -1,0 +1,9 @@
+string  name
+float64 pgain
+float64 igain
+float64 dgain
+---
+string  name
+float64 pgain
+float64 igain
+float64 dgain

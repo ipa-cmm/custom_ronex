@@ -26,7 +26,7 @@ public:
 std::string s;
 std::stringstream ss;
 double analogIN[6];
-ronex::sensorData sens;
+ronex::sensorData sens[4];
 int count;
 ronex::CustomRonex *joint_;
 
@@ -96,15 +96,22 @@ void update(const ros::Time& time, const ros::Duration& period)
 {
 
         //get Sensorvalues
+        for(int i = 0; i < 5; i++)
+                joint_->setDigitalOut(false,i);
+
+        joint_->setCommand(0);
 
         if(count%(5*1000)==0) {
                 /*
                    for(int i = 0; i<6; ++i)
                           ss << joint_->sens.analog[i] << " ";
                  */
-                sens = joint_->getSensorData();
+                sens[0] = joint_->getSensorData(0);
+                sens[1] = joint_->getSensorData(1);
+                sens[2] = joint_->getSensorData(2);
+                sens[3] = joint_->getSensorData(3);
                 double analogTmp = joint_->getAnalog(0);
-                ss << "test " << std::hex << sens.velocity << " " << analogTmp;
+                ss << "test " << sens[0].position << " " << sens[1].position << " " << sens[2].position << " " << sens[3].position << " " << analogTmp;
 
                 s = ss.str();
                 ROS_INFO_STREAM(s);
