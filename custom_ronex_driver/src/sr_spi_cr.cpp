@@ -251,6 +251,12 @@ void SrSPI_cr::packCommand(unsigned char *buffer, bool halt, bool reset)
 
                         ROS_DEBUG_STREAM("" << ss.str());
                 }
+                ostringstream debugSS;
+                debugSS << std::hex << std::setfill('0');
+                for (int i = 0; i<4; i++)
+                        debugSS << " 0x" <<std::setw(2) <<  static_cast<unsigned>(command->spi_out[spi_index].data_bytes[i]);
+                ROS_DEBUG_STREAM(debugSS.str());
+
         }
 }
 
