@@ -211,11 +211,20 @@ void SrSPI_cr::packCommand(unsigned char *buffer, bool halt, bool reset)
 
         for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
         {
-                // TODO Define those as rosparams before!
-                command->spi_out[spi_index].clock_divider   = spi_->command_->spi_out[spi_index].clock_divider;
-                command->spi_out[spi_index].SPI_config      = spi_->command_->spi_out[spi_index].SPI_config;
-                command->spi_out[spi_index].inter_byte_gap  = spi_->command_->spi_out[spi_index].inter_byte_gap;
-                command->spi_out[spi_index].num_bytes       = spi_->command_->spi_out[spi_index].num_bytes;
+                //--------------------------------
+                //--- Configure SPI Connection ---
+                //--------------------------------
+
+                // TODO make those parameters dynamically changeable!
+                // 64 MHz / 16 = 4 MHz
+                command->spi_out[spi_index].clock_divider = 16;
+                // Clock normally low, sample on falling edge
+                command->spi_out[spi_index].SPI_config = SPI_CONFIG_MODE_01;
+                command->spi_out[spi_index].inter_byte_gap = 4;         //0;
+                // Transmition length
+                command->spi_out[spi_index].num_bytes = 24;
+
+
 
                 //----------------------
                 //--- Setup SPI Data ---
@@ -224,6 +233,7 @@ void SrSPI_cr::packCommand(unsigned char *buffer, bool halt, bool reset)
                 command->spi_out[spi_index].data_bytes[1] = 0x00;
                 command->spi_out[spi_index].data_bytes[2] = (spi_->command >> 8) & 0x7F;
                 command->spi_out[spi_index].data_bytes[3] = spi_->command;
+
 
                 // Fill the rest of SPI-Frame with 0
                 for ( size_t i = 4; i < SPI_TRANSACTION_MAX_SIZE; ++i )
