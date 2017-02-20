@@ -99,7 +99,7 @@ void update(const ros::Time& time, const ros::Duration& period)
         for(int i = 0; i < 5; i++)
                 joint_->setDigitalOut(false,i);
 
-        joint_->setCommand(0);
+        joint_->setCommand(255);
 
         if(count%(5*1000)==0) {
                 /*
@@ -110,9 +110,26 @@ void update(const ros::Time& time, const ros::Duration& period)
                 sens[1] = joint_->getSensorData(1);
                 sens[2] = joint_->getSensorData(2);
                 sens[3] = joint_->getSensorData(3);
-                double analogTmp = joint_->getAnalog(0);
-                ss << "test " << sens[0].position << " " << sens[1].position << " " << sens[2].position << " " << sens[3].position << " " << analogTmp;
 
+                ss << "timestp: " << std::setw(10) << sens[0].timestamp << " | " << std::setw(10) << sens[1].timestamp << " | " << std::setw(10) << sens[2].timestamp << " | " << std::setw(10) << sens[3].timestamp;
+                s = ss.str();
+                ROS_INFO_STREAM(s);
+                s.clear();
+                ss.str("");
+
+                ss << "sensor0: " << std::setw(10) << sens[0].sensor0 << " | " << std::setw(10) << sens[1].sensor0 << " | " << std::setw(10) << sens[2].sensor0 << " | " << std::setw(10) << sens[3].sensor0;
+                s = ss.str();
+                ROS_INFO_STREAM(s);
+                s.clear();
+                ss.str("");
+
+                ss << "sensor1: " << std::setw(10) << sens[0].sensor1 << " | " << std::setw(10) << sens[1].sensor1 << " | " << std::setw(10) << sens[2].sensor1 << " | " << std::setw(10) << sens[3].sensor1;
+                s = ss.str();
+                ROS_INFO_STREAM(s);
+                s.clear();
+                ss.str("");
+
+                ss << "sensor2: " << std::setw(10) << sens[0].sensor2 << " | " << std::setw(10) << sens[1].sensor2 << " | " << std::setw(10) << sens[2].sensor2 << " | " << std::setw(10) << sens[3].sensor2 << "\n";
                 s = ss.str();
                 ROS_INFO_STREAM(s);
                 s.clear();
