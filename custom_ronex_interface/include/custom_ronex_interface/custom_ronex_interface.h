@@ -26,8 +26,6 @@
 #ifndef _SPI_HARDWARE_INTERFACE_H_
 #define _SPI_HARDWARE_INTERFACE_H_
 
-#define MAXCOMMAND 4000
-
 #include <ros_ethercat_model/hardware_interface.hpp>
 #include <custom_protocol/Custom_Ronex_Protocol_0x02000002_MYO_MOTOR.h>
 #include <vector>
@@ -36,12 +34,11 @@
 namespace ronex
 {
 struct sensorData {
-        int position;
-        short velocity;
-        short displacement;
-        short current;
-        short sensor1;
-        short sensor2;
+        unsigned char id;
+        int timestamp;
+        float sensor0;
+        float sensor1;
+        float sensor2;
 
 };
 
@@ -64,10 +61,8 @@ CustomRonex()
         for(int i = 0; i<SPI_TRANSACTION_MAX_SIZE; ++i)
                 spi_data[i] = 0;
         for(int i = 0; i<4; i++) {
-                sens[i].position     = 0;
-                sens[i].velocity     = 0;
-                sens[i].displacement = 0;
-                sens[i].current      = 0;
+                sens[i].timestamp    = 0;
+                sens[i].sensor0      = 0;
                 sens[i].sensor1      = 0;
                 sens[i].sensor2      = 0;
         }
@@ -80,7 +75,7 @@ CustomRonex()
 boost::shared_ptr<RONEX_STATUS_02000002> state_;
 boost::shared_ptr<RONEX_COMMAND_02000002> command_;
 
-int command;
+unsigned char command;
 int16u digitalIO;
 int8u spi_data[SPI_TRANSACTION_MAX_SIZE];
 
@@ -95,9 +90,8 @@ void setDigitalOut(bool state,int index){
                         digitalIO &= ~(1 << index);
 }
 
-void setCommand(int command_){
-        if (command < MAXCOMMAND && command > -1*MAXCOMMAND)
-                command = command_;
+void setCommand(unsigned char command_){
+        command = command_;
 }
 
 sensorData getSensorData(int index) const {

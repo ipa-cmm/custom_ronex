@@ -216,27 +216,28 @@ void SrSPI_cr::packCommand(unsigned char *buffer, bool halt, bool reset)
                 //--------------------------------
 
                 // TODO make those parameters dynamically changeable!
-                // 64 MHz / 16 = 4 MHz
-                command->spi_out[spi_index].clock_divider = 16;
+                // 64 MHz / 256 = 0.25 MHz
+                command->spi_out[spi_index].clock_divider = 256;
                 // Clock normally low, sample on falling edge
-                command->spi_out[spi_index].SPI_config = SPI_CONFIG_MODE_01;
+                command->spi_out[spi_index].SPI_config = SPI_CONFIG_MODE_00;
                 command->spi_out[spi_index].inter_byte_gap = 4;         //0;
                 // Transmition length
-                command->spi_out[spi_index].num_bytes = 24;
+                command->spi_out[spi_index].num_bytes = 18;
 
 
 
                 //----------------------
                 //--- Setup SPI Data ---
                 //----------------------
-                command->spi_out[spi_index].data_bytes[0] = 0x80;
-                command->spi_out[spi_index].data_bytes[1] = 0x00;
-                command->spi_out[spi_index].data_bytes[2] = (spi_->command >> 8) & 0x7F;
-                command->spi_out[spi_index].data_bytes[3] = spi_->command;
+                command->spi_out[spi_index].data_bytes[0] = spi_->command;
+
+                //command->spi_out[spi_index].data_bytes[1] = 0x00;
+                //command->spi_out[spi_index].data_bytes[2] = (spi_->command >> 8) & 0x7F;
+                //command->spi_out[spi_index].data_bytes[3] = spi_->command;
 
 
                 // Fill the rest of SPI-Frame with 0
-                for ( size_t i = 4; i < SPI_TRANSACTION_MAX_SIZE; ++i )
+                for ( size_t i = 1; i < SPI_TRANSACTION_MAX_SIZE; ++i )
                         command->spi_out[spi_index].data_bytes[i]  = 0;
 
                 // Do some magic!
@@ -297,12 +298,11 @@ bool SrSPI_cr::unpackState(unsigned char *this_buffer, unsigned char *prev_buffe
                                  */
                         }
                         int8u *data = status_data->info_type.status_data.spi_in[spi_index].data_bytes;
-                        spi_->sens[spi_index].position     = (data[8] << 24) + (data[9] << 16) + (data[10] << 8) + data[11];
-                        spi_->sens[spi_index].velocity     = (data[12] << 8) + data[13];
-                        spi_->sens[spi_index].current      = (data[14] << 8) + data[15];
-                        spi_->sens[spi_index].displacement = (data[16] << 8) + data[17];
-                        spi_->sens[spi_index].sensor1      = (data[18] << 8) + data[19];
-                        spi_->sens[spi_index].sensor2      = (data[20] << 8) + data[21];
+                        //spi_->sens[spi_index].id           = data[0];
+                        spi_->sens[spi_index].timestamp    = (data[1] << 24 ) + (data[2] << 16) + (data[3] << 8) + data[4];
+                        spi_->sens[spi_index].sensor0      = (data[5] << 24 ) + (data[6] << 16) + (data[7] << 8) + data[8];
+                        spi_->sens[spi_index].sensor1      = (data[9] << 24 ) + (data[10] << 16) + (data[11] << 8) + data[12];
+                        spi_->sens[spi_index].sensor2      = (data[13] << 24 ) + (data[14] << 16) + (data[15] << 8) + data[16];
 
                         ostringstream debugSS;
                         debugSS << std::hex << std::setfill('0');
