@@ -22,6 +22,7 @@
  **/
 
 #include <custom_ronex_driver/sr_spi_cr.hpp>
+#include <ros_ethercat_model/joint.hpp>
 #include <ros_ethercat_model/robot_state.hpp>
 #include <ros_ethercat_hardware/ethercat_hardware.h>
 
@@ -199,9 +200,24 @@ void SrSPI_cr::packCommand(unsigned char *buffer, bool halt, bool reset)
         // Configure SlaveSelect on all 4 SPI-Ports
         int16u dio = 0;
 
-
         // Check if digitalOut_ is set in respective joints and add sum them in dio
-        dio |= spi_->digitalIO;
+        //dio |= spi_->digitalIO;
+        /*
+        if (spi_->getDigitalOut(0)) dio |= PIN_OUTPUT_STATE_DIO_0;
+        if (spi_->getDigitalOut(1)) dio |= PIN_OUTPUT_STATE_DIO_1;
+        if (spi_->getDigitalOut(2)) dio |= PIN_OUTPUT_STATE_DIO_2;
+        if (spi_->getDigitalOut(3)) dio |= PIN_OUTPUT_STATE_DIO_3;
+        if (spi_->getDigitalOut(4)) dio |= PIN_OUTPUT_STATE_DIO_4;
+        if (spi_->getDigitalOut(5)) dio |= PIN_OUTPUT_STATE_DIO_5;
+        */
+
+        /*
+        dio |= PIN_OUTPUT_STATE_DIO_0;
+        dio |= PIN_OUTPUT_STATE_DIO_1;
+        dio |= PIN_OUTPUT_STATE_DIO_2;
+        */
+
+        //dio |= PIN_OUTPUT_STATE_DIO_5;
 
         // configure digitalIO states *before* sending SPI signals
         command->pin_output_states_pre = dio;
@@ -217,19 +233,22 @@ void SrSPI_cr::packCommand(unsigned char *buffer, bool halt, bool reset)
 
                 // TODO make those parameters dynamically changeable!
                 // 64 MHz / 256 = 0.25 MHz
-                command->spi_out[spi_index].clock_divider = 256;
+                command->spi_out[spi_index].clock_divider = 16;
                 // Clock normally low, sample on falling edge
-                command->spi_out[spi_index].SPI_config = SPI_CONFIG_MODE_00;
+                command->spi_out[spi_index].SPI_config = SPI_CONFIG_MODE_01;
                 command->spi_out[spi_index].inter_byte_gap = 4;         //0;
                 // Transmition length
-                command->spi_out[spi_index].num_bytes = 18;
+                command->spi_out[spi_index].num_bytes = 24;
 
 
 
                 //----------------------
                 //--- Setup SPI Data ---
                 //----------------------
-                command->spi_out[spi_index].data_bytes[0] = spi_->command;
+                command->spi_out[spi_index].data_bytes[0] = 0x80;
+                command->spi_out[spi_index].data_bytes[1] = 0x00;
+                command->spi_out[spi_index].data_bytes[2] = (spi_->dutyCycle[spi_index] >> 8) & 0x7F;
+                command->spi_out[spi_index].data_bytes[3] = spi_->dutyCycle[spi_index];
 
                 //command->spi_out[spi_index].data_bytes[1] = 0x00;
                 //command->spi_out[spi_index].data_bytes[2] = (spi_->command >> 8) & 0x7F;
@@ -271,7 +290,7 @@ bool SrSPI_cr::unpackState(unsigned char *this_buffer, unsigned char *prev_buffe
         // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
         // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the
         // ronex module has not finished writing it to memory yet.
-        if ( status_data->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
+        if ( status_data->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
         {
                 // copying the status data to the HW interface
                 spi_->state_->command_type = status_data->command_type;

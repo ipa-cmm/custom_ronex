@@ -5,7 +5,7 @@
   <rosparam ns="ronex">
     custom_control:
       type: custom_controllers/custom_controller
-      joint: 'muscle2'
+      <!--joint: 'muscle2' -->
       ronex_id: '1437473669'
   </rosparam>
 

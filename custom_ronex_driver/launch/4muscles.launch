@@ -11,7 +11,7 @@
     <arg name="robot_description" value="$(arg robot_description)"/>
   </include>
 
-  <!-- etherCAT -->
+  <!-- start etherCAT loop -->
   <group if="$(arg debug)">
       <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="gdb -ex run -args"/>
   </group>

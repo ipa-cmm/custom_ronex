@@ -96,10 +96,14 @@ void update(const ros::Time& time, const ros::Duration& period)
 {
 
         //get Sensorvalues
-        for(int i = 0; i < 5; i++)
-                joint_->setDigitalOut(false,i);
+        joint_->setDigitalOut(true,0);
+        joint_->setDigitalOut(true,1);
+        joint_->setDigitalOut(true,2);
+        joint_->setDigitalOut(true,3);
+        joint_->setDigitalOut(false,4);
+        joint_->setDigitalOut(false,5);
 
-        joint_->setCommand(255);
+        //joint_->setCommand(255,2);
 
         if(count%(5*1000)==0) {
                 /*
@@ -110,6 +114,37 @@ void update(const ros::Time& time, const ros::Duration& period)
                 sens[1] = joint_->getSensorData(1);
                 sens[2] = joint_->getSensorData(2);
                 sens[3] = joint_->getSensorData(3);
+
+                uint16_t dio = 0;
+                if (joint_->dgO[0]) dio |= PIN_OUTPUT_STATE_DIO_0;
+                if (joint_->dgO[1]) dio |= PIN_OUTPUT_STATE_DIO_1;
+                if (joint_->dgO[2]) dio |= PIN_OUTPUT_STATE_DIO_2;
+                if (joint_->dgO[3]) dio |= PIN_OUTPUT_STATE_DIO_3;
+                if (joint_->dgO[4]) dio |= PIN_OUTPUT_STATE_DIO_4;
+                if (joint_->dgO[5]) dio |= PIN_OUTPUT_STATE_DIO_5;
+
+                ss << "dio: " << std::setw(10) << dio;
+                s = ss.str();
+                ROS_INFO_STREAM(s);
+                s.clear();
+                ss.str("");
+
+
+                if(joint_->dgO[0]){
+                  ss << "DigitalOut[0]: " << std::setw(10) << joint_->dgO[0];
+                  s = ss.str();
+                  ROS_INFO_STREAM(s);
+                  s.clear();
+                  ss.str("");
+                }
+                if(joint_->dgO[1]){
+                  ss << "DigitalOut[1]: " << std::setw(10) << joint_->dgO[1];
+                  s = ss.str();
+                  ROS_INFO_STREAM(s);
+                  s.clear();
+                  ss.str("");
+                }
+
 
                 ss << "timestp: " << std::setw(10) << sens[0].timestamp << " | " << std::setw(10) << sens[1].timestamp << " | " << std::setw(10) << sens[2].timestamp << " | " << std::setw(10) << sens[3].timestamp;
                 s = ss.str();

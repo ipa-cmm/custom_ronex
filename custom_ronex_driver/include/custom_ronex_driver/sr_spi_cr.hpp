@@ -28,7 +28,8 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/SPIState.h>
 
-#include <custom_protocol/Custom_Ronex_Protocol_0x02000002_MYO_MOTOR.h>
+#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000002_SPI_00.h>
+//#include <custom_protocol/Custom_Ronex_Protocol_0x02000002_MYO_MOTOR.h>
 #include <custom_ronex_interface/custom_ronex_interface.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>

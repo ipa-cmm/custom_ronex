@@ -27,7 +27,9 @@
 #define _SPI_HARDWARE_INTERFACE_H_
 
 #include <ros_ethercat_model/hardware_interface.hpp>
-#include <custom_protocol/Custom_Ronex_Protocol_0x02000002_MYO_MOTOR.h>
+//#include <custom_protocol/Custom_Ronex_Protocol_0x02000002_MYO_MOTOR.h>
+#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000002_SPI_00.h>
+
 #include <vector>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
@@ -46,8 +48,13 @@ class CustomRonex
         : public ros_ethercat_model::CustomHW
 {
 public:
-sensorData sens[4];
-uint16_t analog[6];
+  sensorData sens[4];
+  uint16_t analog[6];
+  boost::shared_ptr<RONEX_STATUS_02000002> state_;
+  boost::shared_ptr<RONEX_COMMAND_02000002> command_;
+  unsigned char dutyCycle[4];
+  int8u spi_data[3][SPI_TRANSACTION_MAX_SIZE];
+  bool dgO[6];
 
 CustomRonex()
 {
@@ -56,42 +63,49 @@ CustomRonex()
         command_->command_type = RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL;
 
         // Set everything to 0
-        digitalIO = 0;
-        command   = 0;
-        for(int i = 0; i<SPI_TRANSACTION_MAX_SIZE; ++i)
-                spi_data[i] = 0;
+        for(int i = 0; i <4; i++)
+        {
+          dutyCycle[i]   = 0;
+
+        }
+
+        for(int j = 0; j< 4; j++)
+          for(int i = 0; i<SPI_TRANSACTION_MAX_SIZE; ++i)
+                  spi_data[j][i] = 0;
         for(int i = 0; i<4; i++) {
                 sens[i].timestamp    = 0;
                 sens[i].sensor0      = 0;
                 sens[i].sensor1      = 0;
                 sens[i].sensor2      = 0;
         }
-        for(int i = 0; i <6; i++)
+        for(int i = 0; i <6; i++){
                 analog[i] = 0;
-
+                dgO[i]= false;
+              }
 
 }
 
-boost::shared_ptr<RONEX_STATUS_02000002> state_;
-boost::shared_ptr<RONEX_COMMAND_02000002> command_;
 
-unsigned char command;
-int16u digitalIO;
-int8u spi_data[SPI_TRANSACTION_MAX_SIZE];
+
+
 
 //  @brief set output pin index to state
 //  @param state new state of pins
 //  @param index index of pin that should be changed
 void setDigitalOut(bool state,int index){
         if(index < 6)
-                if(state)
-                        digitalIO |= 1 << index;
-                else
-                        digitalIO &= ~(1 << index);
+          this->dgO[index] = state;
+
 }
 
-void setCommand(unsigned char command_){
-        command = command_;
+bool getDigitalOut(int index){
+  if(index < 6)
+    return dgO[index];
+}
+
+void setDutyCycle(unsigned char dutyCycle_, int index){
+  if ((index < 4 ) && (index >= 0))
+        dutyCycle[index] = dutyCycle_;
 }
 
 sensorData getSensorData(int index) const {
