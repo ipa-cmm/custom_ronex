@@ -9,6 +9,7 @@ float64  reference
 float64  current
 float64  commanded_effort
 float64  analogIN0
+float64  EMG1
 float64  buffer0
 float64  buffer1
 float64  buffer2
